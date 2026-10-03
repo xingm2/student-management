@@ -28,7 +28,16 @@ COPY --from=build /app/build/libs/*.war \
     /usr/local/tomcat/webapps/ROOT.war
 
 # Exposes port 8080 to allow access to the Tomcat server from outside the container.
-EXPOSE 8080
+#EXPOSE 8080
+# Render expects the web server on 0.0.0.0:10000
+RUN sed -i 's/port="8080"/port="10000" address="0.0.0.0"/' \
+    /usr/local/tomcat/conf/server.xml
+
+# Disable Tomcat shutdown port so Render doesn't mistake it for HTTP
+RUN sed -i 's/<Server port="8005"/<Server port="-1"/' \
+    /usr/local/tomcat/conf/server.xml
+
+EXPOSE 10000
 
 # Starts the Tomcat server.
 CMD ["catalina.sh", "run"]
