@@ -1,0 +1,30 @@
+# Gradle
+.gradle/
+build/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local environment
+.env
+
+node_modules/
+dist/
+.angular/
+coverage/
+
+*.log
+.DS_Store
