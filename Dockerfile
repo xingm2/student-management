@@ -2,7 +2,8 @@
 # This stage compiles the application and packages it into a WAR file using Gradle.
 
 # Starts a build stage using an image with JDK 21. AS build names this stage build, so a later stage can copy files from it.
-FROM eclipse-temurin:21-jdk AS build 
+#FROM eclipse-temurin:21-jdk AS build 
+FROM gradle:8.14-jdk21 AS build
 # Sets the working directory inside the container to /app. All subsequent commands will be run from this directory.
 WORKDIR /app
 
@@ -10,10 +11,10 @@ WORKDIR /app
 COPY . .
 
 # Makes the Gradle wrapper executable.
-RUN chmod +x gradlew
+#RUN chmod +x gradlew
 # Cleans any previous builds and packages the application into a WAR file without using the Gradle daemon.
-RUN ./gradlew clean war --no-daemon
-
+#RUN ./gradlew clean war --no-daemon
+RUN gradle clean war --no-daemon
 
 # Run WAR in Tomcat
 # This stage sets up a Tomcat server and deploys the WAR file generated in the build stage.
