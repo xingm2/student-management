@@ -31,13 +31,23 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
-            "production": {"buildTarget": "angular:build:production"},
-            "development": {"buildTarget": "angular:build:development"}
+            "production": {
+              "buildTarget": "angular:build:production"
+            },
+            "development": {
+              "buildTarget": "angular:build:development"
+            }
           },
           "defaultConfiguration": "development"
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

@@ -1,6 +1,7 @@
 package com.andy.studentmanagement.presentation;
 
 import com.andy.studentmanagement.domain.StudentNotFoundException;
+import com.andy.studentmanagement.domain.CourseNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,17 @@ public class GlobalExceptionHandler {
             StudentNotFoundException ex) {
 
         LOG.warn("Student not found: {}", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleCourseNotFound(
+            CourseNotFoundException ex) {
+
+        LOG.warn("Course not found: {}", ex.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
