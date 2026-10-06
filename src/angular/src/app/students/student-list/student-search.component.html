@@ -1,0 +1,26 @@
+<section class="search-section">
+  <h2>Search Students</h2>
+  <p>{{ studentCount }} students available.</p>
+
+  <div class="search-form">
+    <div class="form-field">
+      <label for="firstName">First Name</label>
+      <input id="firstName" type="text" [(ngModel)]="firstName" />
+    </div>
+
+    <div class="form-field">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" type="text" [(ngModel)]="lastName" />
+    </div>
+
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" type="email" [(ngModel)]="email" />
+    </div>
+
+    <div class="search-buttons">
+      <button type="button" (click)="search()">Search</button>
+      <button type="button" (click)="clear()">Clear</button>
+    </div>
+  </div>
+</section>

@@ -5,45 +5,11 @@
     <button (click)="createStudent()">Create Student</button>
   </div>
 
-  <section class="search-section">
-    <h2>Search Students</h2>
-
-    <div class="search-form">
-
-      <div class="form-field">
-        <label for="firstName">First Name</label>
-        <input
-          id="firstName"
-          type="text"
-          [(ngModel)]="firstName"
-        />
-      </div>
-
-      <div class="form-field">
-        <label for="lastName">Last Name</label>
-        <input
-          id="lastName"
-          type="text"
-          [(ngModel)]="lastName"
-        />
-      </div>
-
-      <div class="form-field">
-        <label for="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          [(ngModel)]="email"
-        />
-      </div>
-
-      <div class="search-buttons">
-        <button (click)="search()">Search</button>
-        <button type="button" (click)="clearSearch()">Clear</button>
-      </div>
-
-    </div>
-  </section>
+  <app-student-search
+    [studentCount]="students.length"
+    (searchRequested)="search($event)"
+    (clearRequested)="clearSearch()"
+  />
 
   @if (errorMessage) {
     <p class="error">{{ errorMessage }}</p>

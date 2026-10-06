@@ -119,8 +119,10 @@ class StudentDAOTest {
         dao.delete(7L);
 
         var inOrder = inOrder(jdbcTemplate);
-        inOrder.verify(jdbcTemplate).update(anyString(), eq(Map.of("studentId", 7L)));
-        inOrder.verify(jdbcTemplate).update(anyString(), eq(Map.of("studentId", 7L)));
+        inOrder.verify(jdbcTemplate).update(
+        contains("DELETE FROM student_courses"), eq(Map.of("studentId", 7L)));
+        inOrder.verify(jdbcTemplate).update(
+        contains("DELETE FROM students"), eq(Map.of("studentId", 7L)));
     }
 
     @Test
