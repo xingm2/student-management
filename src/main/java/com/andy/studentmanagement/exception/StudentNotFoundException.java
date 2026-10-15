@@ -1,4 +1,4 @@
-package com.andy.studentmanagement.domain;
+package com.andy.studentmanagement.exception;
 
 public class StudentNotFoundException extends RuntimeException {
 
