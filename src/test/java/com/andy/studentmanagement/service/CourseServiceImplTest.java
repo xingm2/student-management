@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.andy.studentmanagement.domain.Course;
-import com.andy.studentmanagement.domain.CourseNotFoundException;
+import com.andy.studentmanagement.exception.CourseNotFoundException;
 import com.andy.studentmanagement.domain.CourseRequest;
 import com.andy.studentmanagement.persistence.CourseDAO;
 

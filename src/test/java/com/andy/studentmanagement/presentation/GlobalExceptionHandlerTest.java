@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.andy.studentmanagement.domain.CourseNotFoundException;
+import com.andy.studentmanagement.exception.CourseNotFoundException;
 
 class GlobalExceptionHandlerTest {
 

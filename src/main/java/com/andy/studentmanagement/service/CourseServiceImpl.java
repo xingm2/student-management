@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.andy.studentmanagement.domain.Course;
-import com.andy.studentmanagement.domain.CourseNotFoundException;
+import com.andy.studentmanagement.exception.CourseNotFoundException;
 import com.andy.studentmanagement.domain.CourseRequest;
 import com.andy.studentmanagement.persistence.CourseDAO;
 

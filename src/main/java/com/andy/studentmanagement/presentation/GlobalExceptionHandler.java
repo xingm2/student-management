@@ -1,7 +1,7 @@
 package com.andy.studentmanagement.presentation;
 
-import com.andy.studentmanagement.domain.StudentNotFoundException;
-import com.andy.studentmanagement.domain.CourseNotFoundException;
+import com.andy.studentmanagement.exception.StudentNotFoundException;
+import com.andy.studentmanagement.exception.CourseNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
