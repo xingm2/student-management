@@ -37,6 +37,7 @@ configurations {
 
 def springVersion = '7.0.0'
 
+// This section defines the dependencies for the project.
 dependencies {
 
     // Spring MVC
@@ -109,6 +110,13 @@ openApiGenerate {
     // Package for generated supporting classes
     invokerPackage =
             'com.andy.studentmanagement'
+        
+    
+    // Use hand-written domain classes for Student and Course
+    schemaMappings = [
+        Student: 'com.andy.studentmanagement.domain.Student',
+        Course : 'com.andy.studentmanagement.domain.Course'
+    ]
 
 
     // Generator options
@@ -140,11 +148,25 @@ openApiGenerate {
    
 }
 
+// ============================================================
+// End of OpenAPI Generator configuration
+// ============================================================
+// build sequence:
+
+// student-management-api.yaml
+
+// openApiGenerate
+
+// generate StudentsApi, CoursesApi
+// generate Student, Course, StudentRequest
+
+// compile with hand-written code: Controller / Service / Repository
 
 // ============================================================
 // Add generated OpenAPI Java source
 // ============================================================
 
+// The target folder for generated OpenAPI Java source.
 sourceSets {
     main {
         java {
