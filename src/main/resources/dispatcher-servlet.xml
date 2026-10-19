@@ -12,9 +12,9 @@
            http://www.springframework.org/schema/mvc
            https://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <!-- Scan REST controllers only -->
+    <!-- Scan REST controllers and exception handlers only -->
     <context:component-scan
-        base-package="com.andy.studentmanagement.presentation"/>
+        base-package="com.andy.studentmanagement.presentation,com.andy.studentmanagement.exception"/>
 
     <!-- Bean Validation -->
     <bean id="validator"
