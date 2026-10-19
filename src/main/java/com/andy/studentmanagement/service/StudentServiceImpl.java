@@ -30,7 +30,7 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void createStudent(StudentRequest studentRequest) {
 		LOG.info("Creating new student");
-		//we could add XSS validations here to make sure studenRequest doesn't contain XSS content
+
 		studentDAO.create(studentRequest);
 		LOG.info("Student created successfully");
 	}

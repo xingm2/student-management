@@ -19,7 +19,7 @@ import com.andy.studentmanagement.service.CourseService;
 
 /**
  * Input validation constraints are defined in the OpenAPI YAML and applied through
- * the generated StudentsApi interface.
+ * the generated CoursesApi interface.
  */
 @Authorizer(role = "ADMIN")
 @RestController

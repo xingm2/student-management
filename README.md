@@ -55,24 +55,24 @@ The application uses an in-memory H2 database configured in `src/main/resources/
 ├── build.gradle                  # Gradle build and WAR packaging configuration
 ├── gradlew / gradlew.bat         # Gradle wrapper scripts
 ├── src/
-│   ├── main/
-│   │   ├── java/com/andy/studentmanagement/
-│   │   │   ├── domain/           # Student and course domain models
-│   │   │   ├── persistence/      # Data access objects
-│   │   │   ├── service/          # Business logic
-│   │   │   ├── presentation/     # REST controllers and exception handling
-│   │   │   ├── security/         # Request authorization
-│   │   │   └── exception/        # Application-specific exceptions
-│   │   ├── resources/            # Spring, database, and OpenAPI configuration
-│   │   └── webapp/WEB-INF/       # Servlet web application descriptor
-│   ├── test/java/                # Backend unit and controller tests
-│   └── angular/
-│       └── src/app/
-│           ├── students/         # Student pages and course registration
-│           ├── courses/          # Course pages
-│           ├── services/         # API clients
-│           └── models/           # Frontend data models
-└── Dockerfile                    # Container image configuration
+    ├── main/
+    │   ├── java/com/andy/studentmanagement/
+    │   │   ├── domain/           # Student and course domain models
+    │   │   ├── persistence/      # Data access objects
+    │   │   ├── service/          # Business logic
+    │   │   ├── presentation/     # REST controllers 
+    │   │   ├── security/         # Request authorization
+    │   │   └── exception/        # Application-specific exceptions and exception handling
+    │   ├── resources/            # Spring, database, and OpenAPI configuration
+    │   └── webapp/WEB-INF/       # Servlet web application descriptor
+    ├── test/java/                # Backend unit and controller tests
+    └── angular/
+        └── src/app/
+            ├── students/         # Student pages and course registration
+            ├── courses/          # Course pages
+            ├── services/         # API clients
+            └── models/           # Frontend data models
+
 ```
 
 
@@ -95,7 +95,6 @@ The OpenAPI definition is in `src/main/resources/student-management-api.yaml`. I
 | `PUT` | `/courses/{courseId}` | Update a course. |
 | `DELETE` | `/courses/{courseId}` | Delete a course. |
 
-For student creation or updates, send `firstName`, `lastName`, and `email` in the JSON request body. For course creation or updates, send `name` and `description`. Course enrollment endpoints accept a JSON array of course IDs, for example `[1, 2]`.
 
 ## 5. Functionalities
 
