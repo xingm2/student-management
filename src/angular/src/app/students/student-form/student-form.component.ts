@@ -89,6 +89,8 @@ export class StudentFormComponent implements OnInit {
   }
 
   private createStudent(): void {
+    this.errorMessage = '';
+
     const request: StudentRequest = {
       firstName: this.firstName,
       lastName: this.lastName,
@@ -106,7 +108,13 @@ export class StudentFormComponent implements OnInit {
           error
         );
 
-        this.errorMessage = 'Unable to create student.';
+        if (error.status === 409) {
+          this.errorMessage =
+            'A student with this email already exists. Please use a different email.';
+        } else {
+          this.errorMessage = 'Unable to create student.';
+        }
+        this.changeDetectorRef.detectChanges();
       }
     });
   }

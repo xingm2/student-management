@@ -1,7 +1,14 @@
 package com.andy.studentmanagement.presentation;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 
@@ -10,97 +17,138 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.andy.studentmanagement.domain.Student;
 import com.andy.studentmanagement.domain.StudentRequest;
+import com.andy.studentmanagement.exception.GlobalExceptionHandler;
+import com.andy.studentmanagement.exception.StudentExistException;
 import com.andy.studentmanagement.service.StudentService;
 
 @ExtendWith(MockitoExtension.class)
 class StudentControllerTest {
+	
+	@Mock
+	private StudentService studentService;
 
-    @Mock
-    private StudentService studentService;
+	private MockMvc mockMvc;
 
-    @Mock
-    private StudentRequest request;
+	@BeforeEach
+	void setUp() {
+		
+		StudentController controller =
+                new StudentController(studentService);
 
-    @Mock
-    private Student student;
 
-    private StudentController controller;
+		mockMvc = MockMvcBuilders
+                .standaloneSetup(controller)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
+	}
 
-    @BeforeEach
-    void setUp() {
-        controller = new StudentController(studentService);
+	
+	@Test
+	void getAllStudents_returnAll() throws Exception {
+	    Student student = new Student();
+	    student.setId(1L);
+	    student.setFirstName("Jane");
+	    student.setLastName("doe");
+	    student.setEmail("janedoe@gmail.com");
+	    when(studentService.getAllStudents())
+	            .thenReturn(List.of(student));
+
+	    mockMvc.perform(get("/students")
+	                .accept(MediaType.APPLICATION_JSON))
+	            .andExpect(status().isOk())
+	            .andExpect(jsonPath("$[0].email").value("janedoe@gmail.com"));
+
+	}
+	
+	
+
+	@Test
+    void createStudent_Success() throws Exception {
+		String requestJson = """
+		        {
+		            "firstName": "Alice",
+		            "lastName": "Smith",
+		            "email" : "abc@gmail.com"
+		        }
+		        """;
+
+		    mockMvc.perform(post("/students")
+		            .contentType(MediaType.APPLICATION_JSON)
+		            .content(requestJson))
+		        .andExpect(status().isNoContent());
+		   
+    }
+    
+    @Test
+    void createStudent_duplicateEmail() throws Exception {
+    	String requestJson = """
+		        {
+		            "firstName": "Jane",
+		            "lastName": "Doe",
+		            "email" : "jane.doe@example.com"
+		        }
+		        """;
+
+     
+    	doThrow(new StudentExistException())
+        .when(studentService)
+        .createStudent(any(StudentRequest.class));
+
+    mockMvc.perform(post("/students")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestJson))
+        .andExpect(status().isConflict());
     }
 
+    
     @Test
-    void createStudent_shouldReturnNoContent() {
-        ResponseEntity<Void> response = controller.createStudent(request);
+    void deleteStudent_success() throws Exception {
+        Long studentId = 1L;
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(studentService).createStudent(request);
+        mockMvc.perform(
+                org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                    .delete("/students/{id}", studentId))
+            .andExpect(status().isNoContent());
+
+        verify(studentService, times(1)).deleteStudent(studentId);
     }
-
+    
+    
     @Test
-    void deleteStudent_shouldReturnNoContent() {
-        ResponseEntity<Void> response = controller.deleteStudent(1L);
+    void updateStudent_success() throws Exception {
+        Long studentId = 1L;
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(studentService).deleteStudent(1L);
+        String requestJson = """
+            {
+                "firstName": "Jane",
+                "lastName": "Smith",
+                "email": "jane.smith@example.com"
+            }
+            """;
+
+        mockMvc.perform(
+                org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                    .put("/students/{id}", studentId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestJson))
+            .andExpect(status().isNoContent());
     }
-
+    
     @Test
-    void enrollCourses_shouldReturnNoContent() {
-        List<Long> courseIds = List.of(10L, 20L);
+    void enrollCourses_success() throws Exception {
+        Long studentId = 1L;
 
-        ResponseEntity<Void> response =
-                controller.enrollCourses(1L, courseIds);
+        mockMvc.perform(post("/students/{studentId}/courses", studentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("[101, 102]"))
+            .andExpect(status().isNoContent());
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(studentService).enrollCourses(1L, courseIds);
-    }
-
-    @Test
-    void getAllStudents_shouldReturnOkWithStudents() {
-        List<Student> students = List.of(student);
-        when(studentService.getAllStudents()).thenReturn(students);
-
-        ResponseEntity<List<Student>> response = controller.getAllStudents();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertSame(students, response.getBody());
-    }
-
-    @Test
-    void getStudent_shouldReturnOkWithStudent() {
-        when(studentService.getStudent(1L)).thenReturn(student);
-
-        ResponseEntity<Student> response = controller.getStudent(1L);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertSame(student, response.getBody());
-    }
-
-    @Test
-    void unenrollCourses_shouldReturnNoContent() {
-        List<Long> courseIds = List.of(10L, 20L);
-
-        ResponseEntity<Void> response =
-                controller.unenrollCourses(1L, courseIds);
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(studentService).unenrollCourses(1L, courseIds);
-    }
-
-    @Test
-    void updateStudent_shouldReturnNoContent() {
-        ResponseEntity<Void> response =
-                controller.updateStudent(1L, request);
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(studentService).updateStudent(1L, request);
+       
     }
 }

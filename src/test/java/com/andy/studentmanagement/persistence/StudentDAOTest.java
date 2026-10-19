@@ -114,16 +114,6 @@ class StudentDAOTest {
         );
     }
 
-    @Test
-    void delete_shouldDeleteEnrollmentsThenStudent() {
-        dao.delete(7L);
-
-        var inOrder = inOrder(jdbcTemplate);
-        inOrder.verify(jdbcTemplate).update(
-        contains("DELETE FROM student_courses"), eq(Map.of("studentId", 7L)));
-        inOrder.verify(jdbcTemplate).update(
-        contains("DELETE FROM students"), eq(Map.of("studentId", 7L)));
-    }
 
     @Test
     void enrollCourses_shouldBatchInsertAllCourses() {

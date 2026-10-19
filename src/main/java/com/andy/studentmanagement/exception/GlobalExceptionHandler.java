@@ -16,6 +16,13 @@ public class GlobalExceptionHandler {
     private static final Logger LOG =
             LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    @ExceptionHandler(StudentExistException.class)
+    public ResponseEntity<Map<String, String>> handleStudentExists(
+            StudentExistException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
     @ExceptionHandler(StudentNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleStudentNotFound(
             StudentNotFoundException ex) {

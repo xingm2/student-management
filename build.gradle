@@ -66,11 +66,14 @@ dependencies {
     implementation 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.37'
 
     // Testing
+    testRuntimeOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     testImplementation "org.springframework:spring-test:$springVersion"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.13.4'
     testRuntimeOnly    'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.mockito:mockito-core:5.20.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.20.0'
+    testImplementation 'org.hamcrest:hamcrest:3.0'
+    testImplementation 'com.jayway.jsonpath:json-path:2.9.0'
 
     // Swagger Codegen CLI
     swaggerCodegen 'io.swagger.codegen.v3:swagger-codegen-cli:3.0.52'

@@ -3,6 +3,7 @@ package com.andy.studentmanagement.persistence;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.andy.studentmanagement.domain.Course;
 import com.andy.studentmanagement.domain.CourseRequest;
+import com.andy.studentmanagement.exception.CourseAlreadyExistsException;
 
 @Repository
 public class CourseDAO {
@@ -105,7 +107,11 @@ public class CourseDAO {
 		MapSqlParameterSource params = new MapSqlParameterSource().addValue("name", courseRequest.getName())
 				.addValue("description", courseRequest.getDescription());
 
-		jdbcTemplate.update(INSERT_COURSE, params);
+		try {
+			jdbcTemplate.update(INSERT_COURSE, params);
+		} catch (DuplicateKeyException ex) {
+			throw new CourseAlreadyExistsException(courseRequest.getName());
+		}
 	}
 
 	/**
