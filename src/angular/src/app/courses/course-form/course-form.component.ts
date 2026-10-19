@@ -101,7 +101,14 @@ export class CourseFormComponent implements OnInit {
           error
         );
 
+      if (error.status === 409) {
+        this.errorMessage =
+          'Course already exists. Please use a different name.';
+      } else {
         this.errorMessage = 'Unable to create course.';
+      }
+        // Trigger change detection to update the view with the error message.
+        this.changeDetectorRef.detectChanges();
       }
     });
   }

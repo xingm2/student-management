@@ -38,6 +38,13 @@ public class GlobalExceptionHandler {
                 .body(Map.of("error", ex.getMessage()));
     }
 
+    @ExceptionHandler(CourseAlreadyExistsException.class) // this is thrown by the methods in CourseServiceImpl when a course already exists.
+    public ResponseEntity<String> handleCourseAlreadyExists(
+        CourseAlreadyExistsException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(
             MethodArgumentNotValidException ex) {

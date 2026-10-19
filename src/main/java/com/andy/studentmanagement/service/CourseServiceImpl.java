@@ -14,6 +14,9 @@ import com.andy.studentmanagement.exception.CourseNotFoundException;
 import com.andy.studentmanagement.domain.CourseRequest;
 import com.andy.studentmanagement.persistence.CourseDAO;
 
+import org.springframework.dao.DuplicateKeyException;
+import com.andy.studentmanagement.exception.CourseAlreadyExistsException;
+
 @Service
 public class CourseServiceImpl implements CourseService {
 
@@ -32,7 +35,12 @@ public class CourseServiceImpl implements CourseService {
 
 		LOG.info("Creating course: {}", courseRequest.getName());
 
-		 courseDAO.create(courseRequest);
+		try {
+			courseDAO.create(courseRequest);
+		} catch (DuplicateKeyException ex) {
+			LOG.warn("Course already exists: {}", courseRequest.getName());
+			throw new CourseAlreadyExistsException(courseRequest.getName());
+		}
 
 		LOG.info("Successfully created course with name: {}",courseRequest.getName());
 
